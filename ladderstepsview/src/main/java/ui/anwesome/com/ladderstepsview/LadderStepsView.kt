@@ -6,6 +6,8 @@ package ui.anwesome.com.ladderstepsview
 import android.graphics.*
 import android.content.*
 import android.view.*
+import java.util.concurrent.ConcurrentLinkedQueue
+
 class LadderStepsView(ctx:Context):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     override fun onDraw(canvas:Canvas) {
@@ -55,4 +57,28 @@ class LadderStepsView(ctx:Context):View(ctx) {
 
         }
     }
+    data class Ladder(var w:Float,var h:Float) {
+        var steps:ConcurrentLinkedQueue<LadderStep> = ConcurrentLinkedQueue()
+        fun draw(canvas:Canvas,paint:Paint) {
+            steps.forEach {
+                it.draw(canvas,paint)
+            }
+        }
+        fun update(stopcb:(Float)->Unit) {
+
+        }
+        fun startUpdating(startcb:()->Unit) {
+
+        }
+    }
+}
+fun ConcurrentLinkedQueue<LadderStepsView.LadderStep>.at(i:Int):LadderStepsView.LadderStep? {
+    var j = 0
+    forEach {
+        if(i == j) {
+            return it
+        }
+        j++
+    }
+    return null
 }
