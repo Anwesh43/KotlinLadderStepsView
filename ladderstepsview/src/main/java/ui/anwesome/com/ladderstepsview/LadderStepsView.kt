@@ -52,7 +52,7 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
     data class LadderStep(var i:Int,var x:Float,var y:Float,var size:Float) {
         val state = LadderStepState()
         fun draw(canvas:Canvas,paint:Paint) {
-            canvas.drawLine(x,y-(size/2)*state.scale,x,y+(size/2)*state.scale,paint)
+            canvas.drawLine(x-(size/2)*state.scale,y,x+(size/2)*state.scale,y,paint)
         }
         fun update(stopcb:(Float)->Unit) {
             state.update(stopcb)
@@ -86,12 +86,21 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
                 val y_gap = (9 * h / 10) / (n+1)
                 var y = 19*h/20 - y_gap
                 for (i in 0..n - 1) {
-                    steps.add(LadderStep(i,w/2-w/10,y,w/5))
+                    steps.add(LadderStep(i,w/2,y,w/5))
                     y -= y_gap
                 }
             }
         }
         fun draw(canvas:Canvas,paint:Paint) {
+            paint.strokeWidth = Math.min(w,h)/45
+            paint.strokeCap = Paint.Cap.ROUND
+            paint.color = Color.parseColor("#1A237E")
+            for(i in 0..1) {
+                canvas.save()
+                canvas.translate(w/2-w/10+w/5*i,h/20)
+                canvas.drawLine(0f,0f,0f,0.9f*h,paint)
+                canvas.restore()
+            }
             steps.forEach {
                 it.draw(canvas,paint)
             }
