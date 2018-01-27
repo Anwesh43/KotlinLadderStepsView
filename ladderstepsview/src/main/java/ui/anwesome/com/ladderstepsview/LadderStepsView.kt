@@ -8,7 +8,7 @@ import android.content.*
 import android.view.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class LadderStepsView(ctx:Context):View(ctx) {
+class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     override fun onDraw(canvas:Canvas) {
 
@@ -57,22 +57,30 @@ class LadderStepsView(ctx:Context):View(ctx) {
 
         }
     }
-    data class Ladder(var w:Float,var h:Float) {
+    data class Ladder(var w:Float,var h:Float,var n:Int) {
         var steps:ConcurrentLinkedQueue<LadderStep> = ConcurrentLinkedQueue()
+        val state = LadderState(n)
         fun draw(canvas:Canvas,paint:Paint) {
             steps.forEach {
                 it.draw(canvas,paint)
             }
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.executeCB {
+                steps.at(it)?.update{scale ->
+                    state.incrementCounter()
+                    stopcb(scale)
+                }
+            }
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.executeCB {
+                steps.at(it)?.startUpdating(startcb)
+            }
         }
     }
     data class LadderState(var n:Int,var j:Int = 0,var dir:Int = 1) {
-        fun incrementCounter(j:Int) {
+        fun incrementCounter() {
             j+=dir
             if(j == n || j == -1) {
                 dir*=-1
