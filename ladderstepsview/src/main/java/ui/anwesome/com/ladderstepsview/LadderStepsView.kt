@@ -47,14 +47,15 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
         }
     }
     data class LadderStep(var i:Int,var x:Float,var y:Float,var size:Float) {
+        val state = LadderStepState()
         fun draw(canvas:Canvas,paint:Paint) {
             canvas.drawLine(x,y-size/2,x,y+size/2,paint)
         }
         fun update(stopcb:(Float)->Unit) {
-
+            state.update(stopcb)
         }
         fun startUpdating(startcb:()->Unit) {
-
+            state.startUpdating(startcb)
         }
     }
     data class LadderStepState(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
