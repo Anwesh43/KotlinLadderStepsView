@@ -57,6 +57,23 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
 
         }
     }
+    data class LadderStepState(var scale:Float = 0f,var dir:Float = 0f,var prevScale:Float = 0f) {
+        fun update(stopcb:(Float)->Unit) {
+            scale += 0.1f*dir
+            if(Math.abs(scale - prevScale) > 1) {
+                scale = prevScale + dir
+                dir = 0f
+                prevScale = scale
+                stopcb(scale)
+            }
+        }
+        fun startUpdating(startcb:()->Unit) {
+            if(dir == 0f) {
+                dir = 1-2*scale
+                startcb()
+            }
+        }
+    }
     data class Ladder(var w:Float,var h:Float,var n:Int) {
         var steps:ConcurrentLinkedQueue<LadderStep> = ConcurrentLinkedQueue()
         val state = LadderState(n)
