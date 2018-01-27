@@ -104,6 +104,17 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
             steps.forEach {
                 it.draw(canvas,paint)
             }
+            state.executeCB {
+                for(j in 0..1) {
+                    val diff = (w / 2) / (n)
+                    val x_offset = diff * it
+                    val scale = steps.at(it)?.state?.scale ?: 0f
+                    canvas.save()
+                    canvas.translate(w / 2, h / 40+(19*h/20)*j)
+                    canvas.drawLine(-x_offset - diff * scale, 0f, x_offset + diff * scale, 0f, paint)
+                    canvas.restore()
+                }
+            }
         }
         fun update(stopcb:(Float)->Unit) {
             state.executeCB {
