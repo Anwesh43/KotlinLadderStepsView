@@ -71,6 +71,18 @@ class LadderStepsView(ctx:Context):View(ctx) {
 
         }
     }
+    data class LadderState(var n:Int,var j:Int = 0,var dir:Int = 1) {
+        fun incrementCounter(j:Int) {
+            j+=dir
+            if(j == n || j == -1) {
+                dir*=-1
+                j+=dir
+            }
+        }
+        fun executeCB(cb:(Int)->Unit) {
+            cb(j)
+        }
+    }
 }
 fun ConcurrentLinkedQueue<LadderStepsView.LadderStep>.at(i:Int):LadderStepsView.LadderStep? {
     var j = 0
