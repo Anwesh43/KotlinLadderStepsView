@@ -44,4 +44,15 @@ class LadderStepsView(ctx:Context):View(ctx) {
             }
         }
     }
+    data class LadderStep(var i:Int,var x:Float,var y:Float,var size:Float) {
+        fun draw(canvas:Canvas,paint:Paint) {
+            canvas.drawLine(x,y-size/2,x,y+size/2,paint)
+        }
+        fun update(stopcb:(Float)->Unit) {
+
+        }
+        fun startUpdating(startcb:()->Unit) {
+
+        }
+    }
 }
