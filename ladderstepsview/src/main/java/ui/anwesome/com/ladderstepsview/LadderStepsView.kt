@@ -114,7 +114,7 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
                     canvas.drawLine(-x_offset - diff * scale, 0f, x_offset + diff * scale, 0f, paint)
                     canvas.restore()
                 }
-                paint.color = Color.parseColor("#EEEEEE")
+                paint.color = Color.parseColor("#0D47A1")
                 canvas.drawCircle(w/2,19*h/20-y_gap*it-y_gap*scale,y_gap/5,paint)
             }
         }
