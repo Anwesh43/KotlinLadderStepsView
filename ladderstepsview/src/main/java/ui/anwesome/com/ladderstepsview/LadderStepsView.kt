@@ -78,12 +78,12 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
             }
         }
     }
-    data class Ladder(var w:Float,var h:Float,var n:Int) {
+    data class Ladder(var w:Float,var h:Float,var n:Int,var y_gap:Float = 0f) {
         var steps:ConcurrentLinkedQueue<LadderStep> = ConcurrentLinkedQueue()
         val state = LadderState(n)
         init {
             if(n > 0) {
-                val y_gap = (9 * h / 10) / (n+1)
+                y_gap = (9 * h / 10) / (n+1)
                 var y = 19*h/20 - y_gap
                 for (i in 0..n - 1) {
                     steps.add(LadderStep(i,w/2,y,w/5))
@@ -105,15 +105,17 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
                 it.draw(canvas,paint)
             }
             state.executeCB {
+                val diff = (w / 2) / (n)
+                val x_offset = diff * it
+                val scale = steps.at(it)?.state?.scale ?: 0f
                 for(j in 0..1) {
-                    val diff = (w / 2) / (n)
-                    val x_offset = diff * it
-                    val scale = steps.at(it)?.state?.scale ?: 0f
                     canvas.save()
                     canvas.translate(w / 2, h / 40+(19*h/20)*j)
                     canvas.drawLine(-x_offset - diff * scale, 0f, x_offset + diff * scale, 0f, paint)
                     canvas.restore()
                 }
+                paint.color = Color.parseColor("#EEEEEE")
+                canvas.drawCircle(w/2,19*h/20-y_gap*it-y_gap*scale,y_gap/5,paint)
             }
         }
         fun update(stopcb:(Float)->Unit) {
