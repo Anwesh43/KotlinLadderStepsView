@@ -109,6 +109,29 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
             cb(j)
         }
     }
+    data class Renderer(var view:LadderStepsView,var time:Int = 0) {
+        val animator = Animator(view)
+        var ladder:Ladder?=null
+        fun render(canvas:Canvas,paint:Paint) {
+            if(time == 0) {
+                val w = canvas.width.toFloat()
+                val h = canvas.height.toFloat()
+                ladder = Ladder(w,h,view.n)
+            }
+            ladder?.draw(canvas,paint)
+            time++
+            animator.animate {
+                ladder?.update {
+                    animator.stop()
+                }
+            }
+        }
+        fun handleTap() {
+            ladder?.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
 fun ConcurrentLinkedQueue<LadderStepsView.LadderStep>.at(i:Int):LadderStepsView.LadderStep? {
     var j = 0
