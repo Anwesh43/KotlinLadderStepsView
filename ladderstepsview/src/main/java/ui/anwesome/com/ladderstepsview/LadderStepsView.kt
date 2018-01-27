@@ -3,6 +3,7 @@ package ui.anwesome.com.ladderstepsview
 /**
  * Created by anweshmishra on 27/01/18.
  */
+import android.app.Activity
 import android.graphics.*
 import android.content.*
 import android.view.*
@@ -142,6 +143,13 @@ class LadderStepsView(ctx:Context,var n:Int=10):View(ctx) {
             ladder?.startUpdating {
                 animator.start()
             }
+        }
+    }
+    companion object {
+        fun create(activity:Activity):LadderStepsView {
+            val view = LadderStepsView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
